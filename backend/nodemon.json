@@ -1,0 +1,18 @@
+{
+  "watch": ["src"],
+  "ext": "js,json",
+  "ignore": [
+    "node_modules/**",
+    "../frontend/**",
+    "../*.lock",
+    "../**/*.lock",
+    "*.log",
+    ".git/**"
+  ],
+  "env": {
+    "NODE_ENV": "development",
+    "PORT": "4001"
+  }
+}
+
+
