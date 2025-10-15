@@ -9,7 +9,7 @@ function RadialGauge({
   size = 200, thickness = 18,
   label = "", unit = "",
   zones = [
-    { to: 60, color: "#22c55e" }, // green
+    { to: 60, color: "#22c55e" }, 
     { to: 85, color: "#f59e0b" }, // amber
     { to: 100, color: "#ef4444" }, // red
   ],
@@ -28,14 +28,12 @@ function RadialGauge({
   const END = 0;     // right
   const angle = START + (END - START) * pct; // 180 -> 0 as value increases
 
-  // 0° at +X (right), CCW positive (standard math)
   const polar = (deg) => {
     const a = (deg) * Math.PI / 180;
     return { x: cx + r * Math.cos(a), y: cy - r * Math.sin(a) };
     // note the minus on sin(...) because SVG Y grows downward
   };
 
-  // SVG arc along TOP half: use sweep-flag = 0
   const arcPath = (fromDeg, toDeg) => {
     const p1 = polar(fromDeg);
     const p2 = polar(toDeg);
