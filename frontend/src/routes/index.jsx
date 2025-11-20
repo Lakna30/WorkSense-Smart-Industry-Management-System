@@ -10,6 +10,10 @@ import Tasks from '../pages/Tasks.jsx';
 import Schedule from '../pages/Schedule.jsx';
 import Assets from '../pages/Assets.jsx';
 import Employees from '../pages/Employees.jsx';
+import EmployeesPayroll from '../pages/EmployeesPayroll.jsx';
+import EmployeesAttendance from '../pages/EmployeesAttendance.jsx';
+import RealTimeAttendance from '../pages/RealTimeAttendance.jsx';
+import Notifications from '../pages/Notifications.jsx';
 
 const routes = (
   <>
@@ -24,6 +28,10 @@ const routes = (
       <Route path="/schedule" element={<Schedule />} />
       <Route path="/assets" element={<Assets />} />
       <Route path="/employees" element={<Employees />} />
+      <Route path="/employees/payroll" element={<EmployeesPayroll />} />
+      <Route path="/employees/attendance" element={<EmployeesAttendance />} />
+      <Route path="/attendance/realtime" element={<RealTimeAttendance />} />
+      <Route path="/notifications" element={<Notifications />} />
     </Route>
   </>
 );

@@ -64,16 +64,173 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Hero Illustration */}
+        {/* Interactive Dashboard Preview */}
         <div className="mt-16 flex justify-center">
-          <div className="relative w-full max-w-4xl h-96 bg-gray-50 rounded-2xl shadow-lg border border-gray-200 overflow-hidden group hover:shadow-xl transition-all duration-500">
-            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-              <div className="text-center p-6 transform group-hover:scale-[1.02] transition-transform duration-500">
-                <div className="text-4xl mb-4">📊</div>
-                <h3 className="text-xl font-medium text-gray-700">Interactive Dashboard Preview</h3>
-                <p className="text-gray-500 mt-2">Real-time data visualization and analytics</p>
+          <div className="relative w-full max-w-6xl bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden group hover:shadow-md transition-all duration-300">
+            {/* Dashboard Header */}
+            <div className="bg-gradient-to-r from-red-50 to-red-100 px-6 py-4 border-b border-red-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-800">Interactive Dashboard Preview</h3>
+                  <p className="text-gray-600 text-sm">Real-time industrial monitoring</p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span className="text-green-600 text-sm font-medium">Live</span>
+                </div>
               </div>
             </div>
+
+            {/* Dashboard Content */}
+            <div className="p-6 bg-gradient-to-br from-gray-50 to-white">
+              {/* Key Metrics Row */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                {[
+                  { label: "Production", value: "94.2%", color: "text-green-600", bg: "bg-green-50", icon: "📈" },
+                  { label: "Efficiency", value: "87.5%", color: "text-blue-600", bg: "bg-blue-50", icon: "⚡" },
+                  { label: "Quality", value: "99.1%", color: "text-purple-600", bg: "bg-purple-50", icon: "✅" },
+                  { label: "Safety", value: "100%", color: "text-emerald-600", bg: "bg-emerald-50", icon: "🛡️" }
+                ].map((metric, index) => (
+                  <div key={index} className={`${metric.bg} rounded-xl p-4 border border-gray-100 hover:shadow-sm transition-all duration-300`}>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-2xl">{metric.icon}</span>
+                      <div className={`w-2 h-2 ${metric.color.replace('text-', 'bg-')} rounded-full animate-pulse`}></div>
+                    </div>
+                    <div className={`text-2xl font-bold ${metric.color} mb-1`}>{metric.value}</div>
+                    <div className="text-gray-600 text-sm font-medium">{metric.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Gauges and Charts Row */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Temperature Gauge */}
+                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-sm transition-all duration-300">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="font-semibold text-gray-800">Temperature</h4>
+                    <span className="text-orange-500">🌡️</span>
+                  </div>
+                  <div className="relative w-32 h-32 mx-auto mb-4">
+                    <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" r="40" stroke="#f3f4f6" strokeWidth="8" fill="none" />
+                      <circle 
+                        cx="50" cy="50" r="40" 
+                        stroke="#f97316" strokeWidth="8" fill="none"
+                        strokeDasharray="251.2" strokeDashoffset="75.36"
+                        className="transition-all duration-1000 ease-out"
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-gray-800">27°C</div>
+                        <div className="text-xs text-gray-500">Normal</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex justify-between text-sm text-gray-500">
+                    <span>0°</span>
+                    <span>50°</span>
+                  </div>
+                </div>
+
+                {/* Toxic Gas Level Gauge */}
+                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-sm transition-all duration-300">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="font-semibold text-gray-800">Toxic Gas Level</h4>
+                    <span className="text-red-500">⚠️</span>
+                  </div>
+                  <div className="relative w-32 h-32 mx-auto mb-4">
+                    <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" r="40" stroke="#f3f4f6" strokeWidth="8" fill="none" />
+                      <circle 
+                        cx="50" cy="50" r="40" 
+                        stroke="#ef4444" strokeWidth="8" fill="none"
+                        strokeDasharray="251.2" strokeDashoffset="200.96"
+                        className="transition-all duration-1000 ease-out"
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-gray-800">22</div>
+                        <div className="text-xs text-gray-500">Index</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex justify-between text-sm text-gray-500">
+                    <span>0</span>
+                    <span>100</span>
+                  </div>
+                </div>
+
+                {/* Humidity Gauge */}
+                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-sm transition-all duration-300">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="font-semibold text-gray-800">Humidity</h4>
+                    <span className="text-blue-500">💧</span>
+                  </div>
+                  <div className="relative w-32 h-32 mx-auto mb-4">
+                    <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" r="40" stroke="#f3f4f6" strokeWidth="8" fill="none" />
+                      <circle 
+                        cx="50" cy="50" r="40" 
+                        stroke="#3b82f6" strokeWidth="8" fill="none"
+                        strokeDasharray="251.2" strokeDashoffset="88.42"
+                        className="transition-all duration-1000 ease-out"
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-gray-800">65%</div>
+                        <div className="text-xs text-gray-500">RH</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex justify-between text-sm text-gray-500">
+                    <span>0%</span>
+                    <span>100%</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Status Indicators */}
+              <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[
+                  { label: "Machine A", status: "Running", color: "green" },
+                  { label: "Machine B", status: "Running", color: "green" },
+                  { label: "Machine C", status: "Maintenance", color: "yellow" },
+                  { label: "Machine D", status: "Offline", color: "red" }
+                ].map((machine, index) => (
+                  <div key={index} className="bg-white rounded-lg p-3 border border-gray-100 hover:shadow-sm transition-all duration-300">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-700">{machine.label}</span>
+                      <div className={`w-2 h-2 rounded-full ${
+                        machine.color === 'green' ? 'bg-green-400' :
+                        machine.color === 'yellow' ? 'bg-yellow-400' : 'bg-red-400'
+                      } animate-pulse`}></div>
+                    </div>
+                    <div className={`text-xs mt-1 ${
+                      machine.color === 'green' ? 'text-green-600' :
+                      machine.color === 'yellow' ? 'text-yellow-600' : 'text-red-600'
+                    }`}>
+                      {machine.status}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Call to Action */}
+              <div className="mt-6 text-center">
+                <a 
+                  href="/dashboard" 
+                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-medium rounded-lg hover:from-red-600 hover:to-red-700 transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-1"
+                >
+                  View Full Dashboard
+                  <HiOutlineArrowRight className="w-4 h-4 ml-2" />
+                </a>
+              </div>
+            </div>
+
+            {/* Animated Border */}
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-red-400 to-red-300 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           </div>
         </div>
@@ -144,9 +301,9 @@ export default function Home() {
             ].map((feature, index) => (
               <div 
                 key={index}
-                className="bg-gray-200 border border-gray-300 rounded-xl p-6 shadow-[0_14px_28px_rgba(0,0,0,0.28)] hover:shadow-[0_24px_48px_rgba(0,0,0,0.40)] transition-all duration-300 hover:-translate-y-1 group hover:border-gray-400"
+                className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 group hover:border-red-200"
               >
-                <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 bg-white shadow-xs group-hover:shadow-sm ${feature.color} transition-all duration-300`}>
+                <div className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 bg-gradient-to-br from-gray-50 to-gray-100 shadow-sm group-hover:shadow-sm ${feature.color} transition-all duration-300`}>
                   {feature.icon}
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800 group-hover:text-gray-900 transition-colors">{feature.title}</h3>
@@ -239,7 +396,7 @@ export default function Home() {
       </div>
 
       {/* Add this to your global CSS or style tag */}
-      <style jsx>{`
+      <style>{`
         @keyframes blob {
           0% {
             transform: translate(0px, 0px) scale(1);

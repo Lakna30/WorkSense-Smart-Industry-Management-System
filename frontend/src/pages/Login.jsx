@@ -2,15 +2,17 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../lib/api.js';
 import { setToken } from '../lib/auth.js';
+import useAppStore from '../lib/store.js';
 import Button from '../components/ui/Button.jsx';
 import Input from '../components/ui/Input.jsx';
 
 export default function Login() {
-  const [email, setEmail] = useState('admin@example.com');
-  const [password, setPassword] = useState('admin');
+  const [email, setEmail] = useState('admin@worksense.com');
+  const [password, setPassword] = useState('admin123');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { setUser } = useAppStore();
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -18,10 +20,12 @@ export default function Login() {
     try {
       const { data } = await api.post('/auth/login', { email, password });
       setToken(data.token);
+      setUser(data.user); // Store user data in global state
       const redirect = location.state?.from?.pathname || '/home';
       navigate(redirect, { replace: true });
     } catch (err) {
-      alert('Login failed');
+      console.error('Login error:', err);
+      alert('Login failed: ' + (err.response?.data?.message || err.message));
     } finally {
       setLoading(false);
     }

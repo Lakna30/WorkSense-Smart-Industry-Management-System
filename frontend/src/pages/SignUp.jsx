@@ -1,23 +1,38 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../lib/api.js';
+import useAppStore from '../lib/store.js';
 import Button from '../components/ui/Button.jsx';
 import Input from '../components/ui/Input.jsx';
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const { setUser } = useAppStore();
+  const [form, setForm] = useState({ 
+    first_name: '', 
+    last_name: '', 
+    email: '', 
+    password: '' 
+  });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
+    
     try {
-      // Placeholder: call backend when available
-      await new Promise((r) => setTimeout(r, 600));
-      navigate('/login', { replace: true });
+      const { data } = await api.post('/auth/register', form);
+      console.log('Registration successful:', data);
+      setUser(data.user); // Store user data
+      alert('Registration successful! You are now logged in.');
+      navigate('/home', { replace: true });
+    } catch (err) {
+      console.error('Registration error:', err);
+      setError(err.response?.data?.message || 'Registration failed');
     } finally {
       setLoading(false);
     }
@@ -31,9 +46,48 @@ export default function SignUp() {
           <p className="mt-2 text-sm text-gray-600">Join Smart Industry today</p>
         </div>
         <form className="bg-white shadow-xl rounded-xl p-8 border border-gray-100" onSubmit={onSubmit}>
-          <Input label="Full name" name="name" value={form.name} onChange={onChange} placeholder="Alex Taylor" />
-          <Input label="Email address" type="email" name="email" value={form.email} onChange={onChange} placeholder="you@example.com" />
-          <Input label="Password" type="password" name="password" value={form.password} onChange={onChange} placeholder="••••••••" />
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-md">
+              {error}
+            </div>
+          )}
+          <div className="grid grid-cols-2 gap-4">
+            <Input 
+              label="First name" 
+              name="first_name" 
+              value={form.first_name} 
+              onChange={onChange} 
+              placeholder="John" 
+              required
+            />
+            <Input 
+              label="Last name" 
+              name="last_name" 
+              value={form.last_name} 
+              onChange={onChange} 
+              placeholder="Doe" 
+              required
+            />
+          </div>
+          <Input 
+            label="Email address" 
+            type="email" 
+            name="email" 
+            value={form.email} 
+            onChange={onChange} 
+            placeholder="you@example.com" 
+            required
+          />
+          <Input 
+            label="Password" 
+            type="password" 
+            name="password" 
+            value={form.password} 
+            onChange={onChange} 
+            placeholder="••••••••" 
+            required
+            minLength="6"
+          />
           <Button type="submit" disabled={loading} className="w-full py-3 mt-2">
             {loading ? 'Creating…' : 'Create account'}
           </Button>
