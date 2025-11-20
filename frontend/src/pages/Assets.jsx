@@ -5,9 +5,10 @@ import { HiOutlineSearch, HiOutlinePlus, HiOutlineAdjustments, HiOutlineClock,
          HiOutlineEye, HiOutlinePencil, HiOutlineTrash, HiOutlineRefresh,
          HiOutlineFilter, HiOutlineViewGrid, HiOutlineViewList,
          HiOutlineCog, HiOutlineChartBar, HiOutlinePrinter, HiOutlineTrendingUp,
-         HiOutlineTrendingDown, HiOutlineExclamationTriangle, HiOutlineCheckCircle,
+         HiOutlineTrendingDown, HiOutlineCheckCircle,
          HiOutlineXCircle, HiOutlineSelector, HiOutlineDuplicate, HiOutlineArchive,
          HiOutlineChartPie, HiOutlineTable, HiOutlineDocumentReport } from 'react-icons/hi';
+import { HiOutlineExclamationTriangle } from "react-icons/hi2";
 import { FaBuilding, FaTools, FaCar, FaLaptop, FaChair, FaDesktop, FaChartLine } from 'react-icons/fa';
 import AssetActionModal from '../components/ui/AssetActionModal';
 import api from '../lib/api.js';
