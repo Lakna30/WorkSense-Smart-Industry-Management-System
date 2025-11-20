@@ -1,6 +1,8 @@
-import knex from '../../knexfile.js';
+import knex from 'knex';
+import knexConfig from '../../knexfile.js';
+import { v2 as cloudinary } from 'cloudinary';
 
-const db = knex.development;
+const db = knex(knexConfig.development);
 
 export const getAllEmployees = async (req, res) => {
   try {
@@ -77,35 +79,108 @@ export const getEmployeeById = async (req, res) => {
 
 export const createEmployee = async (req, res) => {
   try {
-    const employeeData = req.body;
-    
-    // Validate required fields
+    const {
+      first_name,
+      last_name,
+      email,
+      job_title,
+      department,
+      gender,
+      position,
+      salary,
+      rfid_uid,
+      emergency_contact_name,
+      emergency_contact_phone,
+      emergency_contact_relationship,
+      hire_date,
+      birth_date,
+      address,
+      city,
+      state,
+      zip_code,
+      country
+    } = req.body;
+
+    // ✅ Validate required fields
     const requiredFields = ['first_name', 'last_name', 'email', 'job_title', 'department'];
     for (const field of requiredFields) {
-      if (!employeeData[field]) {
+      if (!req.body[field]) {
         return res.status(400).json({
           success: false,
           message: `${field} is required`
         });
       }
     }
-    
-    // Check if email already exists
-    const existingEmployee = await db('employees')
-      .where('email', employeeData.email)
-      .first();
-    
+
+    // ✅ Check if email already exists
+    const existingEmployee = await db('employees').where('email', email).first();
     if (existingEmployee) {
       return res.status(400).json({
         success: false,
         message: 'Employee with this email already exists'
       });
     }
-    
-    const [newEmployee] = await db('employees')
-      .insert(employeeData)
-      .returning('*');
-    
+
+    // ✅ Check if RFID UID already exists (if provided)
+    if (rfid_uid) {
+      const existingUID = await db('employees').where('rfid_uid', rfid_uid).first();
+      if (existingUID) {
+        return res.status(400).json({
+          success: false,
+          message: 'RFID UID already assigned to another employee'
+        });
+      }
+    }
+
+    // ✅ Handle uploaded photo (if any) - upload to Cloudinary if configured
+    let photo_url = null;
+    if (req.file) {
+      try {
+        const folder = process.env.CLOUDINARY_FOLDER || 'worksense/employees';
+        const result = await new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder, resource_type: 'image' },
+            (error, res) => (error ? reject(error) : resolve(res))
+          );
+          stream.end(req.file.buffer);
+        });
+        photo_url = result.secure_url;
+      } catch (_) {/* fallback below */}
+    }
+    // Fallback: if client sent a direct URL in photo_url string, accept it
+    if (!photo_url && typeof req.body.photo_url === 'string' && req.body.photo_url) {
+      photo_url = req.body.photo_url;
+    }
+
+    // ✅ Prepare data to insert
+    const employeeData = {
+      first_name,
+      last_name,
+      email,
+      job_title,
+      department,
+      gender,
+      position,
+      salary,
+      rfid_uid: rfid_uid || null,
+      emergency_contact_name,
+      emergency_contact_phone,
+      emergency_contact_relationship,
+      hire_date: hire_date || null,
+      birth_date: birth_date || null,
+      address,
+      city,
+      state,
+      zip_code,
+      country,
+      photo_url,
+      is_active: true,
+      created_at: new Date()
+    };
+
+    // ✅ Insert into database
+    const [newEmployee] = await db('employees').insert(employeeData).returning('*');
+
     res.status(201).json({
       success: true,
       data: newEmployee,
@@ -154,6 +229,23 @@ export const updateEmployee = async (req, res) => {
       }
     }
     
+    // Image update handling
+    if (req.file) {
+      try {
+        const folder = process.env.CLOUDINARY_FOLDER || 'worksense/employees';
+        const result = await new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder, resource_type: 'image' },
+            (error, res) => (error ? reject(error) : resolve(res))
+          );
+          stream.end(req.file.buffer);
+        });
+        updateData.photo_url = result.secure_url;
+      } catch (e) {
+        // ignore cloud upload error and continue without changing photo
+      }
+    }
+
     const [updatedEmployee] = await db('employees')
       .where('id', id)
       .update(updateData)

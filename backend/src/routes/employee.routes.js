@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import multer from 'multer';
 import {
   getAllEmployees,
   getEmployeeById,
@@ -11,25 +12,17 @@ import {
 
 const router = Router();
 
-// Get all employees with search and filters
+// Multer setup (store image file in memory for now)
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+// Routes
 router.get('/', getAllEmployees);
-
-// Get employee by ID
 router.get('/:id', getEmployeeById);
-
-// Create new employee
-router.post('/', createEmployee);
-
-// Update employee
-router.put('/:id', updateEmployee);
-
-// Delete employee (soft delete)
+router.post('/', upload.single('photo_url'), createEmployee);
+router.put('/:id', upload.single('photo_url'), updateEmployee);
 router.delete('/:id', deleteEmployee);
-
-// Get all departments
 router.get('/departments/list', getDepartments);
-
-// Get all job titles
 router.get('/job-titles/list', getJobTitles);
 
 export default router;
