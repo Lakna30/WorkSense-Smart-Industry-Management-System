@@ -1,6 +1,24 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import useAppStore from '../../lib/store.js';
+import { clearToken } from '../../lib/auth.js';
+import ProfilePopup from '../ui/ProfilePopup.jsx';
+import NotificationButton from '../ui/NotificationButton.jsx';
 
 export default function Navbar() {
+  const { user, clearUser } = useAppStore();
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  const handleLogout = () => {
+    clearToken();
+    clearUser();
+    window.location.href = '/login';
+  };
+
+  const getUserInitials = (firstName, lastName) => {
+    return `${firstName?.charAt(0) || ''}${lastName?.charAt(0) || ''}`.toUpperCase();
+  };
+
   return (
     <header className="sticky top-0 z-50 bg-gray-900/90 backdrop-blur-md border-b border-gray-800 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -47,32 +65,63 @@ export default function Navbar() {
               </svg>
             </button>
             
+            {/* Notification Button */}
+            {user && <NotificationButton />}
+            
             <div className="hidden md:block h-6 w-px bg-gray-700"></div>
             
-            <Link
-              to="/profile"
-              className="hidden md:flex items-center gap-2 group"
-            >
-              <div className="relative">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-gray-700 to-gray-800 flex items-center justify-center text-gray-300 font-medium">
-                  JD
-                </div>
-                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-green-500 border-2 border-gray-900"></span>
+            {user ? (
+              <div className="hidden md:flex items-center gap-3">
+                <button
+                  onClick={() => setIsProfileOpen(true)}
+                  className="flex items-center gap-2 group hover:bg-gray-800 rounded-lg px-2 py-1 transition-colors"
+                >
+                  <div className="relative">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center text-white font-medium">
+                      {getUserInitials(user.first_name, user.last_name)}
+                    </div>
+                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-green-500 border-2 border-gray-900"></span>
+                  </div>
+                  <span className="text-sm font-medium text-gray-300 group-hover:text-white transition-colors">
+                    {user.first_name} {user.last_name}
+                  </span>
+                </button>
               </div>
-              <span className="text-sm font-medium text-gray-300 group-hover:text-red-400 transition-colors">
-                John D.
-              </span>
-            </Link>
+            ) : (
+              <Link
+                to="/login"
+                className="hidden md:flex items-center gap-2 text-gray-300 hover:text-white transition-colors"
+              >
+                <span className="text-sm font-medium">Login</span>
+              </Link>
+            )}
             
-            {/* Mobile menu button */}
-            <button className="md:hidden p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none transition-colors">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+            {/* Mobile profile button */}
+            {user ? (
+              <button
+                onClick={() => setIsProfileOpen(true)}
+                className="md:hidden p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none transition-colors"
+              >
+                <div className="w-6 h-6 rounded-full bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center text-white font-medium text-xs">
+                  {getUserInitials(user.first_name, user.last_name)}
+                </div>
+              </button>
+            ) : (
+              <button className="md:hidden p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none transition-colors">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            )}
           </div>
         </div>
       </div>
+
+      {/* Profile Popup */}
+      <ProfilePopup 
+        isOpen={isProfileOpen} 
+        onClose={() => setIsProfileOpen(false)} 
+      />
 
       {/* Mobile menu (hidden by default) */}
       <div className="md:hidden hidden">
