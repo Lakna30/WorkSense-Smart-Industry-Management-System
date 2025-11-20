@@ -1,0 +1,13 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = true
+	symlinks = false
+	ignorecase = true
+[remote "origin"]
+	url = https://work_sense-admin@bitbucket.org/worksense_iot/worksense.git
+	fetch = +refs/*:refs/*
+	mirror = true
+[remote "github"]
+	url = https://github.com/Lakna30/WorkSense.git
+	fetch = +refs/heads/*:refs/remotes/github/*

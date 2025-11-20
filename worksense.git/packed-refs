@@ -1,0 +1,20 @@
+# pack-refs with: peeled fully-peeled sorted 
+e69d9f4ad59bd40f23d51042e6f64aa91912c00e refs/heads/IMS-100
+6a499029e8297cf10d943de999365c13ae6b8aea refs/heads/IMS-21
+807fa8bae9a70443b2d669411e5f08fb6d6a9a8d refs/heads/IMS-23
+1751ead273b8bd7ff69560164da60f7f9380e0b2 refs/heads/IMS-26
+e2bbdc7b65db7933db3e2da4eae4ce50e389c2ce refs/heads/IMS-30
+ed602ffa894a029ecddba671ccc10e86641e5832 refs/heads/IMS-31
+641d33241db3950b8e603736f8f55a09f6c40401 refs/heads/IMS-33
+080b6715cffbf421b6ee5ecbf8b2f000e8beaaf5 refs/heads/IMS-34
+b63d5a1439665ae008b135a10cdcf17502c8ca01 refs/heads/IMS-35
+d5e9ff252271abc58f3c1b9ae48e6a7675d22db9 refs/heads/IMS-38
+4ff9978210c9e6e300890a27a98d83c090d98259 refs/heads/IMS-39
+5d59e2b20e225e90044f53bd5d020eb3a4038254 refs/heads/IMS-40
+230624ed354e092e33dfee058f62ee79f0d6c914 refs/heads/IMS-42
+78e897ea4c3d4114017ccd9d08f85186de7f6bd2 refs/heads/IMS-44
+aeb1f7cc7b4fcdbc65a472091706865fe035b385 refs/heads/IMS-48
+55a3f53a5c611534926ec9162849f9d84cfa7553 refs/heads/develop
+956740e645c8637d3935591e52a2ba59e64cc475 refs/heads/main
+e32aa36ccdc11bb868d3a2fbabf000a4e51a9e92 refs/heads/release/version_1.01
+956740e645c8637d3935591e52a2ba59e64cc475 refs/heads/release/version_2.01
